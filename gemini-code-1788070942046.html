@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>京都 旅のしおり - KYOTO TRIP 2026</title>
+<style>
+    /* 基本設定 */
+    :root {
+        --primary-color: #8c2d19;   /* 朱色 */
+        --secondary-color: #2c4c3b; /* 常磐色 */
+        --accent-color: #b8860b;    /* 金茶 */
+        --bg-color: #f8f6f2;        /* 和紙風薄地 */
+        --card-bg: #ffffff;
+        --text-color: #2c2a29;
+        --border-color: #e2ded4;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans CJK JP', meiryo, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        padding-top: 50px; /* 固定ナビバーの高さ分 */
+        line-height: 1.6;
+    }
+
+    /* 固定タブナビゲーション */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 48px;
+        background-color: var(--secondary-color);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+        padding: 0 10px;
+        overflow-x: auto;
+        white-space: nowrap;
+        z-index: 1000;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .navbar a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: bold;
+        padding: 5px 12px;
+        border-radius: 15px;
+        background-color: rgba(255,255,255,0.15);
+        transition: background 0.2s;
+    }
+
+    .navbar a:hover {
+        background-color: var(--primary-color);
+    }
+
+    /* コンテナ */
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 15px;
+    }
+
+    /* セクション */
+    .section {
+        scroll-margin-top: 60px;
+        margin-bottom: 30px;
+    }
+
+    /* タイトルデザイン */
+    .section-title {
+        font-size: 1.25rem;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    .section-title span.en {
+        font-size: 0.85rem;
+        color: var(--accent-color);
+        font-weight: normal;
+    }
+
+    /* カード */
+    .card {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .card-header {
+        font-weight: bold;
+        color: var(--secondary-color);
+        border-bottom: 1px dashed var(--border-color);
+        padding-bottom: 6px;
+        margin-bottom: 10px;
+        font-size: 1.05rem;
+    }
+
+    /* 表紙 */
+    .cover-header {
+        text-align: center;
+        background-color: var(--primary-color);
+        color: #ffffff;
+        padding: 25px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .cover-title-en {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #f4e8c1;
+        letter-spacing: 2px;
+    }
+
+    .cover-title-ja {
+        font-size: 1.3rem;
+        margin-top: 5px;
+    }
+
+    .cover-subtitle {
+        font-size: 0.9rem;
+        margin-top: 10px;
+        opacity: 0.9;
+    }
+
+    /* テーブル */
+    table.data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+        font-size: 0.88rem;
+    }
+
+    table.data-table th {
+        background-color: var(--secondary-color);
+        color: #ffffff;
+        padding: 8px;
+        text-align: left;
+        font-weight: normal;
+    }
+
+    table.data-table td {
+        padding: 8px;
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: top;
+    }
+
+    table.data-table tr:nth-child(even) td {
+        background-color: #faf8f3;
+    }
+
+    /* バッジ */
+    .badge {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        margin-left: 4px;
+    }
+    .badge-red { background-color: #fbebe8; color: #b83b27; border: 1px solid #f2c2ba; }
+    .badge-green { background-color: #eaf4ee; color: #2c4c3b; border: 1px solid #b2d8c3; }
+    .badge-gold { background-color: #fdf8e6; color: #966b0d; border: 1px solid #f0dfa8; }
+
+    /* Google Maps ボタン */
+    .map-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        margin-left: 6px;
+        padding: 2px 7px;
+        background-color: #eef5fc;
+        color: #1e56a0;
+        border: 1px solid #b8d4f2;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.78rem;
+        font-weight: normal;
+        vertical-align: middle;
+        transition: background 0.2s;
+    }
+
+    .map-btn:hover {
+        background-color: #d0e3f7;
+    }
+
+    /* タイムライン */
+    .timeline-item {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+
+    @media (min-width: 600px) {
+        .timeline-item {
+            flex-direction: row;
+        }
+    }
+
+    .timeline-time {
+        background-color: var(--primary-color);
+        color: #ffffff;
+        font-weight: bold;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 110px;
+    }
+
+    .timeline-content {
+        padding: 10px 12px;
+        flex-grow: 1;
+    }
+
+    .timeline-title {
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+        font-size: 0.88rem;
+        color: #444;
+        margin-bottom: 6px;
+    }
+
+    .timeline-meta {
+        font-size: 0.8rem;
+        color: #666;
+        border-top: 1px dotted var(--border-color);
+        padding-top: 4px;
+    }
+
+    /* チェックリスト */
+    .checklist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 8px;
+    }
+
+    .checklist li {
+        background: #faf8f3;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px 10px;
+    }
+
+    .checklist label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.88rem;
+    }
+
+    .checklist input[type="checkbox"] {
+        accent-color: var(--primary-color);
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+    .checklist input[type="checkbox"]:checked + span {
+        text-decoration: line-through;
+        color: #888;
+    }
+
+    /* 右下固定アクションボタン */
+    .action-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 1000;
+    }
+
+    .btn-action {
+        background-color: var(--primary-color);
+        color: #ffffff;
+        border: none;
+        padding: 9px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.82rem;
+        font-weight: bold;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        text-align: center;
+        transition: transform 0.1s, background-color 0.2s;
+    }
+
+    .btn-action:hover {
+        background-color: #6e2313;
+        transform: translateY(-2px);
+    }
+
+    /* 印刷時の設定 */
+    @media print {
+        body {
+            padding-top: 0;
+            background: #fff;
+        }
+        .navbar, .action-buttons, .map-btn {
+            display: none !important;
+        }
+        .section {
+            page-break-after: always;
+        }
+        .card {
+            border: 1px solid #ccc;
+            box-shadow: none;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- 固定タブナビゲーション -->
+<nav class="navbar">
+    <a href="#top">TOP</a>
+    <a href="#overview">概要・極意</a>
+    <a href="#weather">天気・持ち物</a>
+    <a href="#day1">DAY 1 (東山)</a>
+    <a href="#day2">DAY 2 (伏見・宇治)</a>
+    <a href="#day3">DAY 3 (嵐山)</a>
+    <a href="#food">グルメ・メモ</a>
+</nav>
+
+<!-- 便利アクションボタン -->
+<div class="action-buttons">
+    <a href="#top" class="btn-action">↑ トップへ</a>
+    <button onclick="window.print()" class="btn-action">🖨️ 印刷/PDF</button>
+</div>
+
+<div class="container" id="top">
+
+    <!-- PAGE 1: 表紙 -->
+    <div class="cover-header">
+        <div class="cover-title-en">KYOTO TRIP 2026</div>
+        <div class="cover-title-ja">京都 旅のしおり</div>
+        <div class="cover-subtitle">～伝統と風情を巡る東京発2泊3日の大人旅～</div>
+    </div>
+
+    <div class="card">
+        <table class="data-table">
+            <tr>
+                <th style="width: 30%;">旅行先</th>
+                <td>京都府(東山・祇園、伏見・宇治、嵐山)</td>
+            </tr>
+            <tr>
+                <th>出発地</th>
+                <td>東京(JR東京駅/品川駅)</td>
+            </tr>
+            <tr>
+                <th>旅行日程</th>
+                <td>2026年9月24日(木)～9月26日(土)【2泊3日】</td>
+            </tr>
+            <tr>
+                <th>旅のコンセプト</th>
+                <td>名所めぐり&京の風情と旬の味覚を愉しむ、ゆとりある大人の満足旅</td>
+            </tr>
+            <tr>
+                <th>作成・編集</th>
+                <td>Travel Planner & Designer Team (最終更新: 2026年8月29日)</td>
+            </tr>
+        </table>
+        <div style="font-size:0.8rem; color:#666; margin-top:8px;">
+            【ご利用にあたって】本しおりは最新の公式一次情報をもとに制作されています。交通機関のダイヤや各施設の営業時間は、現地での状況や天候により変更となる場合があります。ご出発直前にも最新情報をご確認ください。
+        </div>
+    </div>
+
+    <!-- PAGE 2: TRIP OVERVIEW -->
+    <div class="section" id="overview">
+        <div class="section-title">
+            旅行概要・基本方針 <span class="en">/ TRIP OVERVIEW</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 旅の基本仕様 & 移動の基本</div>
+            <ul style="margin:0; padding-left:18px; font-size:0.88rem;">
+                <li><strong>往復交通：</strong> 東海道新幹線「のぞみ」（東京⇔京都 約2時間15分/全席指定）</li>
+                <li><strong>市内移動：</strong> JR奈良線・嵯峨野線、京阪電車、地下鉄、徒歩をスマートに連携（交通系IC利用）</li>
+                <li><strong>拠点ホテル：</strong> JR京都駅周辺（荷物預け・移動アクセスが抜群の好立地を推奨）</li>
+                <li><strong>旅のスタイル：</strong> 同一エリアまとめ&朝活を活用し、混雑を避けた快適・ゆとり日程</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ エリア別ハイライト (3日間)</div>
+            <div style="font-size:0.88rem;">
+                <p><strong>DAY 1 (東山・祇園)：</strong> 清水寺～二寧坂・産寧坂～八坂の塔～高台寺～八坂神社～祇園散策。京都の歴史と王道風景を満喫。</p>
+                <p><strong>DAY 2 (伏見・宇治)：</strong> 千本鳥居の伏見稲荷大社朝参拝、世界遺産・平等院鳳凰堂&宇治上神社、宇治茶スイーツを満喫。</p>
+                <p><strong>DAY 3 (嵐山・嵯峨野)：</strong> 爽快な竹林の小径、世界遺産・天龍寺庭園、渡月橋、屋形船遊覧、おせんべい食べ歩きで締めくくり。</p>
+                <p><strong>RAINY DAY (雨天安心案)：</strong> 二条城(屋内国宝見学)、三十三間堂、京都国立博物館、錦市場アーケード等で雨でも快適観光。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 京都旅行を100%楽しむための「5つの極意」</div>
+            <ol style="margin:0; padding-left:18px; font-size:0.85rem;">
+                <li><strong>「朝活」が最大の混雑回避策：</strong> 人気の清水寺(6:00開門)や伏見稲荷大社(24時間)、竹林の小径は午前9時前までの訪問で混雑を劇的に回避できます。</li>
+                <li><strong>手ぶら観光の徹底：</strong> 京都駅到着後、「京都駅八条口キャリーサービス」やホテル配送を利用し、大きな荷物を預けてすぐ観光へ出発するのが鉄則。</li>
+                <li><strong>歩きやすいスニーカー推奨：</strong> 石畳、坂道(三年坂・清水坂)、伏見稲荷の階段、天龍寺の砂利道など歩く距離が長くなります。</li>
+                <li><strong>市バス過信はNG、鉄道+徒歩を優先：</strong> 東山・秋シーズン前後の市バスは渋滞で大幅遅延が発生しがち。JR・地下鉄・京阪+徒歩が最も計算できます。</li>
+                <li><strong>拝観マナーと静粛な鑑賞：</strong> 寺社境内や重要文化財(鳳凰堂内など)は撮影禁止エリアや土足厳禁エリアがあります。靴下の着用を忘れずに。</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 事前予約必須・推奨チェック</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>対象項目</th>
+                        <th>手配方法/時期</th>
+                        <th>注意事項・ポイント</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>新幹線指定席</strong></td>
+                        <td>スマートEX/1ヶ月前</td>
+                        <td>特大荷物スペース付き座席が必要な場合は要早め予約。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>平等院鳳凰堂内部</strong></td>
+                        <td>当日現地受付(庭園内)</td>
+                        <td>定員50名/20分毎。10:00前の到着で待ち時間を最小化。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>夕食(京懐石・有名店)</strong></td>
+                        <td>Web/電話(2週間～1ヶ月前)</td>
+                        <td>祇園・河原町周辺の夕食は事前予約が無いと難民になりがち。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PAGE 3: WEATHER & CLOTHING -->
+    <div class="section" id="weather">
+        <div class="section-title">
+            天気・気温・持ち物 <span class="en">/ WEATHER & CLOTHING</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 9月下旬の京都の気候傾向 (参考値)</div>
+            <p style="font-size:0.85rem; margin-top:0;">
+                9月下旬の京都は「暑さの残る秋の入口」です。日中は27～29℃まで上がり汗ばむ陽気となりますが、朝晩は20℃を下回り心地よい涼しさになります。朝晩と日中の寒暖差(約8～10℃)に対応できる服装が重要です。
+            </p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>日程</th>
+                        <th>予想最高</th>
+                        <th>予想最低</th>
+                        <th>降水確率</th>
+                        <th>天候の傾向</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>9月24日(木)</strong></td>
+                        <td>28℃</td>
+                        <td>19℃</td>
+                        <td>30%</td>
+                        <td>晴れ時々曇り / 日中は初夏の陽気</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9月25日(金)</strong></td>
+                        <td>27℃</td>
+                        <td>18℃</td>
+                        <td>25%</td>
+                        <td>概ね晴れ / 観光に最適な秋晴れ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9月26日(土)</strong></td>
+                        <td>27℃</td>
+                        <td>19℃</td>
+                        <td>35%</td>
+                        <td>曇り時々晴れ / やや湿気あり</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="font-size:0.75rem; color:#777; text-align:right;">※過去10年の気象庁観測データおよび平年値に基づく推定情報(取得日:2026年8月29日)</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 日別の推奨スタイル & コーディネート</div>
+            <div style="font-size:0.85rem;">
+                <p><strong>【9/24 DAY 1】東山坂道さんぽ：</strong><br>
+                ・トップス: 通気性の良い綿・麻シャツまたはTシャツ<br>
+                ・ボトムス: 動きやすいパンツ・ストレッチ素材<br>
+                ・羽織もの: カーディガンや薄手長袖シャツ(夜の祇園散策用)<br>
+                ・靴: 坂道・石畳に対応するクッション性の高いスニーカー</p>
+                
+                <p><strong>【9/25 DAY 2】伏見・宇治アクティブ：</strong><br>
+                ・トップス: 吸湿速乾性インナー+薄手カットソー<br>
+                ・ポイント: 伏見稲荷の千本鳥居・四ツ辻登山で汗をかくため、着脱しやすいレイヤードがベスト。</p>
+                
+                <p><strong>【9/26 DAY 3】嵐山・竹林散策：</strong><br>
+                ・服装: 竹林や渡月橋周辺は日陰や川風で少し涼しく感じられます。長袖シャツや薄手ジャケットを持参。<br>
+                ・靴: 砂利道・木道に対応できるスニーカー。</p>
+                
+                <p><strong>【全日共通の必須対策】：</strong><br>
+                ・紫外線対策(日傘・サングラス・日焼け止め) / 水分補給(ボトル持参) / 突然の秋雨に備えた軽量折りたたみ傘</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 持ち物チェックリスト (服装・快適グッズ編)</div>
+            <ul class="checklist">
+                <li><label><input type="checkbox"><span>履き慣れたスニーカー・歩きやすい靴</span></label></li>
+                <li><label><input type="checkbox"><span>脱ぎ着しやすい薄手の羽織もの(カーディガン/シャツ)</span></label></li>
+                <li><label><input type="checkbox"><span>晴雨兼用折りたたみ傘(UVカット仕様)</span></label></li>
+                <li><label><input type="checkbox"><span>着脱しやすい靴下(寺社拝観で靴を脱ぐため)</span></label></li>
+                <li><label><input type="checkbox"><span>モバイルバッテリー(写真撮影・地図検索用)</span></label></li>
+                <li><label><input type="checkbox"><span>エコバッグ(お土産購入用)</span></label></li>
+                <li><label><input type="checkbox"><span>ハンカチ・汗拭きシート・日焼け止め</span></label></li>
+                <li><label><input type="checkbox"><span>小銭入れ(拝観料・お賽銭・自動販売機用)</span></label></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PAGE 4: DAY 1 -->
+    <div class="section" id="day1">
+        <div class="section-title">
+            DAY 1 : 東山・祇園エリア <span class="en">/ 9月24日(木)</span>
+        </div>
+        <div style="background-color:#f2ede4; padding:8px 12px; border-radius:4px; font-size:0.85rem; margin-bottom:12px; border-left:4px solid var(--primary-color);">
+            <strong>テーマ：</strong> 古都の情緒を満喫する王道・東山さんぽ（東京発～世界遺産清水寺と祇園の夕景）
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">08:00 - 10:15</div>
+            <div class="timeline-content">
+                <div class="timeline-title">JR東京駅発 ➔ JR京都駅着 <span class="badge badge-green">東海道新幹線のぞみ</span></div>
+                <div class="timeline-desc">東京駅08:00発 (のぞみ) 乗車➔10:15京都駅着。車内で朝食または車窓の富士山を楽しむ。</div>
+                <div class="timeline-meta">料金: 約¥14,200(指定席) / 所要時間: 約2時間15分 / 予約: 要事前予約</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">10:15 - 11:00</div>
+            <div class="timeline-content">
+                <div class="timeline-title">京都駅到着 ➔ 荷物預け ➔ 清水寺へ移動</div>
+                <div class="timeline-desc">京都駅八条口「キャリーサービス」またはロッカーに大きな荷物を預け、手ぶら観光開始。<br>移動: JR京都駅前バス乗り場から市バス206系統・86系統等で「五条坂」または「清水道」へ (約15分)。</div>
+                <div class="timeline-meta">バス料金: ¥230 (交通系IC利用可) / 清水道バス停より徒歩約10分</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">11:00 - 12:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    清水寺(きよみずでら) 参拝 <span class="badge badge-red">世界遺産</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=清水寺+京都" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">国宝・本堂(清水の舞台) からの京都市街の絶景と、音羽の滝を鑑賞。奥の院からの本堂撮影がベストショット。</div>
+                <div class="timeline-meta">拝観時間: 6:00～18:00 / 拝観料: 大人¥500 / 滞在時間目安: 約75～90分</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">12:30 - 14:00</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    産寧坂・二寧坂散策 & 風情あるランチ
+                    <a href="https://www.google.com/maps/search/?api=1&query=産寧坂+京都" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">伝統的建造物群保存地区の美しい石畳の坂道を散策。途中で京豆腐・湯豆腐やおばんざいのランチをいただく。</div>
+                <div class="timeline-meta">おすすめランチ: 「奥丹清水」または「阿み達」 / 予算: ¥2,000～¥3,500</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">14:00 - 15:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    八坂の塔(法観寺) ➔ 高台寺周辺散策
+                    <a href="https://www.google.com/maps/search/?api=1&query=八坂の塔+京都" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">京都のランドマーク 「八坂の塔」を背景に写真撮影 (八坂通からの構図が最高)。ねねの道を通り高台寺周辺へ。</div>
+                <div class="timeline-meta">高台寺拝観料: ¥600 (9:00～17:30) / 混雑ポイント: 八坂の塔前は車通りに注意</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">15:30 - 18:00</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    八坂神社参拝 ➔ 祇園(花見小路・白川筋) 散策
+                    <a href="https://www.google.com/maps/search/?api=1&query=八坂神社+京都" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">祇園の守り神・八坂神社でお参り後、花見小路通や白川沿いの石畳を散策。甘味処(鍵善良房・辻利)で抹茶休憩。</div>
+                <div class="timeline-meta">八坂神社: 境内自由・拝観無料 / 祇園散策: 私道での撮影規制マナー遵守</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">18:00 - 20:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    祇園・先斗町エリアでディナー ➔ ホテルチェックイン
+                    <a href="https://www.google.com/maps/search/?api=1&query=先斗町+京都" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">鴨川沿いや先斗町の風情あるお店で京料理またはカジュアル和食を堪能。市バスまたは地下鉄で京都駅へ戻りチェックイン。</div>
+                <div class="timeline-meta">夕食予算: ¥4,000～¥8,000 / 要事前予約を推奨</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: DAY 2 -->
+    <div class="section" id="day2">
+        <div class="section-title">
+            DAY 2 : 伏見・宇治エリア <span class="en">/ 9月25日(金)</span>
+        </div>
+        <div style="background-color:#eaf4ee; padding:8px 12px; border-radius:4px; font-size:0.85rem; margin-bottom:12px; border-left:4px solid var(--secondary-color);">
+            <strong>テーマ：</strong> 千本鳥居の朱と宇治茶の香りを訪ねて（朝の神社参拝と世界遺産・宇治散策）
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">07:30 - 08:00</div>
+            <div class="timeline-content">
+                <div class="timeline-title">京都駅発 ➔ JR稲荷駅着 <span class="badge badge-green">JR奈良線</span></div>
+                <div class="timeline-desc">JR奈良線(普通列車)で約5分。稲荷駅を出ると目の前が伏見稲荷大社。朝の空いている時間帯に到着。</div>
+                <div class="timeline-meta">運賃: ¥150 / 所要時間: 約5分 / 早朝出発で大混雑を回避</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">08:00 - 10:15</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    伏見稲荷大社参拝(千本鳥居～四ツ辻) <span class="badge badge-gold">絶景スポット</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=伏見稲荷大社" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">朱色の鳥居が連なる千本鳥居を通り、奥社奉拝所 (おもかる石)へ。さらに四ツ辻まで登り、京都市街を一望する絶景を楽しむ。</div>
+                <div class="timeline-meta">参拝時間: 24時間自由 / 拝観料: 無料 / 往復所要時間: 約90～120分(ハイキング仕様の靴が最適)</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">10:20 - 10:45</div>
+            <div class="timeline-content">
+                <div class="timeline-title">JR稲荷駅発 ➔ JR宇治駅着 <span class="badge badge-green">JR奈良線</span></div>
+                <div class="timeline-desc">JR奈良線みやこ路快速または普通電車で宇治へ移動。車窓から緑豊かな宇治の風景へシフト。</div>
+                <div class="timeline-meta">運賃: ¥240 / 所要時間: 約20分</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">10:45 - 12:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    宇治橋 ➔ 平等院鳳凰堂拝観 <span class="badge badge-red">世界遺産</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=平等院鳳凰堂" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">10円玉のデザインで有名な鳳凰堂と阿字池の美しい反射を鑑賞。ミュージアム鳳翔館で国宝の雲中供養菩薩像を見学。</div>
+                <div class="timeline-meta">鳳翔館拝観料: ¥700 / 鳳凰堂内部拝観: 追加¥300(当日受付・人数限定) / 営業時間: 8:45～17:30</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">12:30 - 14:00</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    宇治川沿いランチ & 中州散策
+                    <a href="https://www.google.com/maps/search/?api=1&query=宇治公園+中ノ島" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">宇治橋通り商店街や宇治川沿いで名物「宇治茶蕎麦」や茶盛り膳を堪能。食後に宇治公園 (中ノ島)をのんびりお散歩。</div>
+                <div class="timeline-meta">おすすめランチ: 「中村藤吉本店/平等院店」または「竹林」 / 予算: ¥1,500～¥3,000</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">14:00 - 15:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    宇治上神社参拝 ➔ 宇治抹茶スイーツ体験 <span class="badge badge-red">世界遺産</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=宇治上神社" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">現存する日本最古の神社本殿を持つ宇治上神社を拝観。その後、伊藤久右衛門や中村藤吉で極上の抹茶パフェや抹茶スイーツを味わう。</div>
+                <div class="timeline-meta">宇治上神社: 境内無料(9:00～16:30) / 抹茶カフェ予算: ¥1,000～¥1,800</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">16:00 - 18:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    JR宇治駅発 ➔ JR京都駅着 ➔ 京都駅ビル・ポルタで夕食
+                    <a href="https://www.google.com/maps/search/?api=1&query=京都駅ビル" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">JR奈良線で京都駅へ(約20分)。夕食は京都駅ビル (拉麺小路やレストラン街) または地下街ポルタでゆったり。</div>
+                <div class="timeline-meta">夕食予算: ¥2,000～¥5,000 / 京都タワーの夜景もおススメ</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 6: DAY 3 -->
+    <div class="section" id="day3">
+        <div class="section-title">
+            DAY 3 : 嵐山・嵯峨野エリア <span class="en">/ 9月26日(土)</span>
+        </div>
+        <div style="background-color:#fdf8e6; padding:8px 12px; border-radius:4px; font-size:0.85rem; margin-bottom:12px; border-left:4px solid var(--accent-color);">
+            <strong>テーマ：</strong> 渡月橋と竹林に癒される景勝地めぐり（朝の清涼な竹林と風情ある屋形船）
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">08:30 - 09:15</div>
+            <div class="timeline-content">
+                <div class="timeline-title">ホテルチェックアウト ➔ JR京都駅発 ➔ JR嵯峨嵐山駅着</div>
+                <div class="timeline-desc">ホテルに荷物を預けるか京都駅ロッカーを利用。JR嵯峨野線(山陰本線)で約16分、嵯峨嵐山駅下車。</div>
+                <div class="timeline-meta">運賃: ¥240 / 所要時間: 約16分</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">09:15 - 10:15</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    竹林の小径散策 <span class="badge badge-gold">絶景スポット</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=竹林の小径+嵐山" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">野宮神社から大河内山荘へ続く約400mの青竹の道。風で笹が擦れ合う美しい音色と清涼な空気感を満喫。</div>
+                <div class="timeline-meta">見学自由・無料 / 混雑回避: 10:00前までの散策が静かでベスト撮影タイミング</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">10:15 - 11:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    世界遺産 天龍寺(曹源池庭園・大方丈) <span class="badge badge-red">世界遺産</span>
+                    <a href="https://www.google.com/maps/search/?api=1&query=天龍寺" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">室町時代のおもかげを残す日本初の史跡・特別名勝「曹源池庭園」。大方丈の縁側に座り、嵐山を借景とした庭園を眺める。</div>
+                <div class="timeline-meta">参拝時間: 8:30～17:00 / 庭園参拝料: ¥500(諸堂参拝は+¥300)</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">11:30 - 12:40</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    渡月橋散策 & 桂川沿いランチ
+                    <a href="https://www.google.com/maps/search/?api=1&query=渡月橋" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">嵐山のシンボル「渡月橋」を渡り、桂川の雄大な景色を背景に記念撮影。周辺の食事処でランチ (嵐山豆腐料理や京丼)。</div>
+                <div class="timeline-meta">おすすめランチ: 「嵐山豆腐料理松ヶ枝」または「よしむら」 / 予算: ¥2,000～¥4,000</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">12:40 - 14:00</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    おせんべい食べ歩き & 嵐山屋形船(保津川遊覧)
+                    <a href="https://www.google.com/maps/search/?api=1&query=嵐山通船" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">「寺子屋本舗嵐山本舗」で焼きたて熱々のおせんべいや串煎餅をテイクアウト。桂川の「嵐山通船」で屋形船に乗船し、水上からの景観を楽しむ。</div>
+                <div class="timeline-meta">寺子屋本舗: 10:00～18:00 (煎餅¥180～) / 屋形船: 約30分コース 大人約¥1,500～¥1,800</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">14:00 - 15:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    嵐山駅周辺散策 (昇龍苑・キモノフォレスト) ➔ 京都駅へ移動
+                    <a href="https://www.google.com/maps/search/?api=1&query=嵐電嵐山駅+キモノフォレスト" target="_blank" class="map-btn">📍 Map</a>
+                </div>
+                <div class="timeline-desc">嵐電嵐山駅の「キモノフォレスト (京友禅のポール)」を鑑賞。JR嵯峨嵐山駅からJR嵯峨野線で京都駅へ戻る。</div>
+                <div class="timeline-meta">運賃: ¥240 / 所要時間: 約16分</div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-time">15:30 - 17:30</div>
+            <div class="timeline-content">
+                <div class="timeline-title">京都駅でお土産購入 ➔ 荷物受け取り ➔ 新幹線乗車</div>
+                <div class="timeline-desc">京都駅構内(おみやげ街道・ポルタ) で京銘菓 (阿闍梨餅・生八ツ橋等)をお買いもの。荷物を受け取り新幹線ホームへ。</div>
+                <div class="timeline-meta">新幹線: 京都駅17:30発➔東京駅19:45着 (のぞみ) / 旅の締めくくり</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 7: FOOD & MEMO -->
+    <div class="section" id="food">
+        <div class="section-title">
+            グルメガイド & 旅のメモ <span class="en">/ FOOD & LOCAL PICKS</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ エリア別おすすめ飲食店ガイド</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>店舗名</th>
+                        <th>エリア/ジャンル</th>
+                        <th>予算目安</th>
+                        <th>営業時間/定休日</th>
+                        <th>予約要否/特徴</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>奥丹清水</strong>
+                            <a href="https://www.google.com/maps/search/?api=1&query=奥丹清水" target="_blank" class="map-btn">📍 Map</a>
+                        </td>
+                        <td>東山/湯豆腐</td>
+                        <td>昼:¥3,300～</td>
+                        <td>11:00～16:30<br>(木曜定休 要確認)</td>
+                        <td><span class="badge badge-red">予約推奨</span><br>創業350年超。江戸時代からの伝統の味と庭園。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>鍵善良房 本店</strong>
+                            <a href="https://www.google.com/maps/search/?api=1&query=鍵善良房+本店" target="_blank" class="map-btn">📍 Map</a>
+                        </td>
+                        <td>祇園/甘味処</td>
+                        <td>¥1,000～¥1,800</td>
+                        <td>10:00～18:00<br>(月曜定休)</td>
+                        <td><span class="badge badge-green">予約不可</span><br>吉野葛を使用した名物「くずきり」が絶品。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>中村藤吉 平等院店</strong>
+                            <a href="https://www.google.com/maps/search/?api=1&query=中村藤吉+平等院店" target="_blank" class="map-btn">📍 Map</a>
+                        </td>
+                        <td>宇治/抹茶スイーツ</td>
+                        <td>¥1,200～¥2,200</td>
+                        <td>10:00～17:00<br>(無休)</td>
+                        <td><span class="badge badge-gold">当日整理券</span><br>宇治川を望む絶景ロケーションで生茶ゼリイ。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>伊藤久右衛門 本店</strong>
+                            <a href="https://www.google.com/maps/search/?api=1&query=伊藤久右衛門+本店" target="_blank" class="map-btn">📍 Map</a>
+                        </td>
+                        <td>宇治/抹茶パフェ</td>
+                        <td>¥1,000～¥1,800</td>
+                        <td>10:00～18:00<br>(無休)</td>
+                        <td><span class="badge badge-gold">当日整理券</span><br>季節限定の豪華抹茶パフェや抹茶そば。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>嵐山 蕎麦よしむら</strong>
+                            <a href="https://www.google.com/maps/search/?api=1&query=嵐山+蕎麦よしむら" target="_blank" class="map-btn">📍 Map</a>
+                        </td>
+                        <td>嵐山/手打ちそば</td>
+                        <td>昼:¥2,000～</td>
+                        <td>11:00～17:00<br>(無休)</td>
+                        <td><span class="badge badge-red">予約推奨</span><br>渡月橋と桂川のパノラマ絶景を眺めながら手打ち蕎麦。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>寺子屋本舗 嵐山本舗</strong>
+                            <a href="https://www.google.com/maps/search/?api=1&query=寺子屋本舗+嵐山本舗" target="_blank" class="map-btn">📍 Map</a>
+                        </td>
+                        <td>嵐山/和菓子・せんべい</td>
+                        <td>¥200～¥600</td>
+                        <td>10:00～17:30<br>(無休)</td>
+                        <td><span class="badge badge-green">不要</span><br>焼きたてのお醤油せんべい、ぬれせんべいのテイクアウト。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header">■ 旅のメモ・緊急連絡先</div>
+            <table class="data-table">
+                <tr>
+                    <th style="width:40%;">緊急連絡先(京都駅前交番)</th>
+                    <td>075-371-0110</td>
+                </tr>
+                <tr>
+                    <th>観光案内所(京ナビ)</th>
+                    <td>075-343-5636 (JR京都駅2F 南北自由通路沿い)</td>
+                </tr>
+                <tr>
+                    <th>キャリーサービス</th>
+                    <td>075-682-5200 (JR京都駅八条口)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
